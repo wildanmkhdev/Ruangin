@@ -13,7 +13,7 @@ class CityController extends Controller
     {
         // Ambil semua data kota dari tabel City,
         // lalu hitung juga berapa banyak officeSpace (ruang kantor) yang dimiliki tiap kota
-        $cities = City::withCount('officeSpaces as officeSpaces_count')->get();
+        $cities = City::withCount('officeSpaces')->get();
 
         // Tampilkan semua data kota dalam bentuk JSON yang rapi,
         // karena data-nya lebih dari satu, maka pakai collection
@@ -28,7 +28,7 @@ class CityController extends Controller
         $city->load(['officeSpaces.city', 'officeSpaces.photos']);
 
         // Hitung berapa banyak ruang kantor yang dimiliki oleh kota ini
-        $city->loadCount('officeSpaces as officeSpaces_count');
+        $city->loadCount('officeSpaces');
 
         // Tampilkan 1 data kota dalam bentuk JSON yang rapi,
         // karena hanya satu data, maka pakai 'new' bukan 'collection'
