@@ -20,6 +20,7 @@ Route::middleware('cek_api')->group(
         Route::apiResource('/offices', OfficeSpaceController::class);
 
         Route::post('/booking-transaction', [BookingTransactionController::class, 'store']);
+        Route::get('/booking-transaction', [BookingTransactionController::class, 'store']);
         Route::post('/check-booking', [BookingTransactionController::class, 'booking-details']);
     }
 );

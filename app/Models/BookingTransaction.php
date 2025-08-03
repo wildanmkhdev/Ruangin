@@ -26,15 +26,8 @@ class BookingTransaction extends Model
         'office_space_id',
 
     ];
-    // function buat trx id acak
-    public function generateUniqueTrxId()
-    {
-        $prefix = 'FO';
-        do {
-            $randomString = $prefix . mt_rand(1000, 9999);
-        } while (self::where('booking_trx_id', $randomString)->exists());
-        return $randomString;
-    }
+    
+
     public function officeSpace(): BelongsTo
     {
         return $this->belongsTo(OfficeSpace::class, 'office_space_id');
