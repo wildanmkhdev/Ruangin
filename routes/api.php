@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\OfficeSpaceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -20,7 +21,7 @@ Route::middleware('cek_api')->group(
 
         Route::post('/booking-transaction', [BookingTransactionController::class, 'store']);
         Route::get('/booking-transaction', [BookingTransactionController::class, 'store']);
-        Route::post('/check-booking', [BookingTransactionController::class, 'booking-details']);
+        Route::post('/check-booking', [BookingTransactionController::class, 'booking_details']);
     }
 );
 
