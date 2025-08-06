@@ -80,10 +80,11 @@ class BookingTransactionResource extends Resource
                 // ambil field namepada klom city
                 Tables\Columns\IconColumn::make('is_paid')
                     ->boolean()
-                    ->trueColor('danger')
-                    ->falseColor('success')
-                    ->trueIcon('heroicon-o-x-circle')
-                    ->falseIcon('heroicon-o-check-circle')
+                    ->trueColor('success')
+                    ->falseColor('danger')
+                    ->trueIcon('heroicon-o-check-circle')
+                    ->falseIcon('heroicon-o-x-circle')
+
                     ->label('sudah bayar'),
 
 

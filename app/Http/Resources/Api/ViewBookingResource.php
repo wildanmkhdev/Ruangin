@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Api\OfficeSpaceResource; // ✅ Tambahkan import
 
 class ViewBookingResource extends JsonResource
 {
@@ -24,8 +25,7 @@ class ViewBookingResource extends JsonResource
             'total_amount' => $this->total_amount,
             'started_at' => $this->started_at,
             'ended_at' => $this->ended_at,
-            'ended_at' => new OfficeSpaceResource($this->whenLoaded('officeSpace')),
-
+            'office' => new OfficeSpaceResource($this->whenLoaded('officeSpace')), // ✅ Fixed key name
         ];
     }
 }

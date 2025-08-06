@@ -18,18 +18,25 @@ class BookingTransactionController extends Controller
             'phone_number' => 'required|string',
             'booking_trx_id' => 'required|string',
         ]);
+
         $booking = BookingTransaction::where('phone_number', $request->phone_number)
             ->where('booking_trx_id', $request->booking_trx_id)
-            ->with('officeSpace')
+            ->with(['officeSpace', 'officeSpace.city'])
             ->first();
+
         if (!$booking) {
             return response()->json([
-                'message' => 'booking is not found'
+                'message' => 'Booking is not found'
             ], 404);
-            return new ViewBookingResource($booking);
         }
-    }
 
+        // ✅ Return booking data ketika ditemukan
+        return response()->json([
+            'success' => true,
+            'message' => 'Booking found successfully',
+            'data' => new ViewBookingResource($booking)
+        ], 200);
+    }
     public function store(StoreBookingTransactionRequest $request)
     {
         $data = $request->validated();
