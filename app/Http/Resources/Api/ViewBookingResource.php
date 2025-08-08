@@ -25,7 +25,7 @@ class ViewBookingResource extends JsonResource
             'total_amount' => $this->total_amount,
             'started_at' => $this->started_at,
             'ended_at' => $this->ended_at,
-            'office' => new OfficeSpaceResource($this->whenLoaded('officeSpace')), // ✅ Fixed key name
+            'office' => new OfficeSpaceResource($this->whenLoaded('officeSpace')), 
         ];
     }
 }

@@ -20,7 +20,7 @@ Route::middleware('cek_api')->group(
         Route::apiResource('/offices', OfficeSpaceController::class);
 
         Route::post('/booking-transaction', [BookingTransactionController::class, 'store']);
-        Route::get('/booking-transaction', [BookingTransactionController::class, 'store']);
+        Route::get('/booking-transaction', [BookingTransactionController::class, 'index']);
         Route::post('/check-booking', [BookingTransactionController::class, 'booking_details']);
     }
 );
@@ -28,3 +28,4 @@ Route::middleware('cek_api')->group(
 
 // itu ad dua  cara membuat endpoint bis manual menggunakan get dan otomati mengunalan apiresoource
 // store untuk menyimpan data 
+//show mneamilkan data berdasarkan id atau slug

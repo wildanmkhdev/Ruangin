@@ -11,7 +11,19 @@ use DateTime;
 use Illuminate\Http\Request;
 
 class BookingTransactionController extends Controller
+
 {
+    public function index()
+    {
+        $bookings = BookingTransaction::with(['officeSpace', 'officeSpace.city'])->latest()->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'All bookings fetched successfully',
+            'data' => ViewBookingResource::collection($bookings)
+        ]);
+    }
+
     public function booking_details(Request $request)
     {
         $request->validate([
@@ -37,6 +49,7 @@ class BookingTransactionController extends Controller
             'data' => new ViewBookingResource($booking)
         ], 200);
     }
+    // data ini akan kita kiriim ke fe yg akan di tangkap oleh fe memalu state
     public function store(StoreBookingTransactionRequest $request)
     {
         $data = $request->validated();
@@ -46,8 +59,12 @@ class BookingTransactionController extends Controller
         $data['is_paid'] = false;
         $data['duration'] = $officeSpace->duration;
         $startDate = new DateTime($data['started_at']);
+        // ambil data tanggal terbaru dengan format baru
         $endDate = $startDate->modify("+{$officeSpace->duration} days");
+        // setlah data started_at di ambil kemudian cari office duraton lalu tambahkan
+        // jadi misalnya user masukkan tangagl 10 jika office duration kita 10hari jadi masa berakhirnya tanggal 20
         $data['ended_at'] = $endDate->format('Y-m-d');
+        // simpan ke dalam endedt_at dengan format ymd
         $booking = BookingTransaction::create($data);
         return response()->json([
             'success' => true,

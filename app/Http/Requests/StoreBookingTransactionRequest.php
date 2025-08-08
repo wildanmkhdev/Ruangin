@@ -14,6 +14,7 @@ class StoreBookingTransactionRequest extends FormRequest
     public function authorize(): bool
     {
         return true;
+        // kasih true supaya authorzation yg dari header x api key bis amasuk
     }
 
     /**
@@ -21,6 +22,7 @@ class StoreBookingTransactionRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+    // menegmbalikan array
     public function rules(): array
     {
         return [
