@@ -50,7 +50,7 @@ class BookingTransactionController extends Controller
             'data' => new ViewBookingResource($booking)
         ], 200);
     }
-    // data ini akan kita kiriim ke fe yg akan di tangkap oleh fe memalu state
+    // data ini akan kita kiriim ke fe yg akan di tangkap oleh fe memalu stategit
     public function store(StoreBookingTransactionRequest $request)
     {
         $data = $request->validated();
@@ -81,6 +81,7 @@ class BookingTransactionController extends Controller
                 "from" => getenv("TWILIO_PHONE_NUMBER"),
             ]
         );
+
         // $booking->load('officeSpace');
         return response()->json([
             'success' => true,
