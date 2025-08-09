@@ -9,6 +9,7 @@ use App\Models\BookingTransaction;
 use App\Models\OfficeSpace;
 use DateTime;
 use Illuminate\Http\Request;
+use Twilio\Rest\Client;
 
 class BookingTransactionController extends Controller
 
@@ -65,7 +66,22 @@ class BookingTransactionController extends Controller
         // jadi misalnya user masukkan tangagl 10 jika office duration kita 10hari jadi masa berakhirnya tanggal 20
         $data['ended_at'] = $endDate->format('Y-m-d');
         // simpan ke dalam endedt_at dengan format ymd
+        $sid = getenv("TWILIO_ACCOUNT_SID");
+        $token = getenv("TWILIO_AUTH_TOKEN");
+        $twilio = new Client($sid, $token);
         $booking = BookingTransaction::create($data);
+        $messageBody = "hi {$booking->name},terima kasih telah bokking kantor di ruangin .\n\n";
+        $messageBody .= "pesanan kantor {$booking->officeSpace->name},anda sedang kami proses dengan bokking trx id: {$booking->booking_trx_id} .\n\n";
+        $messageBody .= "kami akan menginformasikan kembali pemesaanan and secepat mungkin";
+        $message = $twilio->messages->create(
+            // "+15558675310", 
+            "+{$booking->phone_number}", // To
+            [
+                "body" => $messageBody,
+                "from" => getenv("TWILIO_PHONE_NUMBER"),
+            ]
+        );
+        // $booking->load('officeSpace');
         return response()->json([
             'success' => true,
             'message' => 'Booking created successfully',
