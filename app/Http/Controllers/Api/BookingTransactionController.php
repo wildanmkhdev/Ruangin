@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookingTransactionRequest;
 use App\Http\Resources\Api\ViewBookingResource;
@@ -50,7 +49,7 @@ class BookingTransactionController extends Controller
             'data' => new ViewBookingResource($booking)
         ], 200);
     }
-    // data ini akan kita kiriim ke fe yg akan di tangkap oleh fe memalu stategit
+    // data ini akan kita kirim ke fe yg akan di tangkap oleh fe memalu stategit
     public function store(StoreBookingTransactionRequest $request)
     {
         $data = $request->validated();

@@ -12,7 +12,6 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
         // cek api disini harus sama dengan yg ad pad aroute group kita
         $middleware->alias([
             'cek_api' => \App\Http\Middleware\CheckApiKey::class,

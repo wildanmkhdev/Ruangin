@@ -13,7 +13,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Php;
+use Filament\Notifications\Notification;  // Tambahkan import ini
+use Twilio\Rest\Client;  // Tambahkan import ini
+use Twilio\TwiML\Voice\Record;
 
 class BookingTransactionResource extends Resource
 {
@@ -57,11 +59,6 @@ class BookingTransactionResource extends Resource
                     ->searchable()
                     ->preload()
                     ->required(),
-
-
-
-
-                //
             ]);
     }
 
@@ -69,7 +66,6 @@ class BookingTransactionResource extends Resource
     {
         return $table
             ->columns([
-                //
                 Tables\Columns\TextColumn::make('booking_trx_id')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('name')
@@ -77,23 +73,55 @@ class BookingTransactionResource extends Resource
                 Tables\Columns\TextColumn::make('officeSpace.name'),
                 Tables\Columns\TextColumn::make('started_at')
                     ->date(),
-                // ambil field namepada klom city
                 Tables\Columns\IconColumn::make('is_paid')
                     ->boolean()
                     ->trueColor('success')
                     ->falseColor('danger')
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle')
-
                     ->label('sudah bayar'),
-
-
             ])
             ->filters([
                 //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('approve')
+                    ->label('Approve')
+                    ->action(function (BookingTransaction $record) {
+                        $record->is_paid = true;
+                        $record->save();
+                        // dia cek udh bayar belum paidnya true atu false
+
+                        // Trigger the custom notification
+                        Notification::make()
+                            ->title('Booking Approved')
+                            ->success()
+                            ->body('The booking has been successfully approved.')
+                            ->send();
+
+                        // Find your Account SID and Auth Token at twilio.com/console
+                        // and set the environment variables. See http://twil.io/secure
+                        $sid = getenv("TWILIO_ACCOUNT_SID");
+                        $token = getenv("TWILIO_AUTH_TOKEN");
+                        $twilio = new Client($sid, $token);
+
+                        // Create the message with line breaks
+                        $messageBody = "Hi {$record->name}, pemesanan Anda dengan kode {$record->booking_trx_id} sudah disetujui. ";
+                        $messageBody .= "Silahkan datang kepada lokasi kantor {$record->officeSpace->name} untuk mulai menggunakan ruangan. ";
+                        $messageBody .= "Jika Anda memiliki pertanyaan silahkan menghubungi CS kami di wildandev.com";
+
+                        $message = $twilio->messages->create(
+                            "+{$record->phone_number}", // Gunakan nomor dari record, bukan hardcode
+                            [
+                                "body" => $messageBody,
+                                "from" => getenv("TWILIO_PHONE_NUMBER"),
+                            ]
+                        );
+                    })
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->visible(fn(BookingTransaction $record) => !$record->is_paid),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
