@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreBookingTransactionRequest;
 use App\Http\Resources\Api\ViewBookingResource;
@@ -72,14 +73,23 @@ class BookingTransactionController extends Controller
         $messageBody = "hi {$booking->name},terima kasih telah bokking kantor di ruangin .\n\n";
         $messageBody .= "pesanan kantor {$booking->officeSpace->name},anda sedang kami proses dengan bokking trx id: {$booking->booking_trx_id} .\n\n";
         $messageBody .= "kami akan menginformasikan kembali pemesaanan and secepat mungkin";
+        // $message = $twilio->messages->create(
+        //     // "+15558675310", 
+        //     "+{$booking->phone_number}", // To
+        //     [
+        //         "body" => $messageBody,
+        //         "from" => getenv("TWILIO_PHONE_NUMBER"),
+        //     ]
+        // );
         $message = $twilio->messages->create(
-            // "+15558675310", 
-            "+{$booking->phone_number}", // To
-            [
+            "whatsapp:+{$booking->phone_number}", // to
+            array(
+                "from" => "whatsapp:+14155238886",
                 "body" => $messageBody,
-                "from" => getenv("TWILIO_PHONE_NUMBER"),
-            ]
+
+            )
         );
+
 
         // $booking->load('officeSpace');
         return response()->json([
