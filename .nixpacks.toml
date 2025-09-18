@@ -1,11 +1,11 @@
 [phases.setup]
 nixPkgs = [
-  "php82",
-  "php82Extensions.intl",
-  "php82Extensions.zip",
-  "php82Extensions.mbstring",
-  "php82Extensions.pdo_mysql",
-  "php82Extensions.tokenizer"
+  "php83",
+  "php83Extensions.intl",
+  "php83Extensions.zip",
+  "php83Extensions.mbstring",
+  "php83Extensions.pdo_mysql",
+  "php83Extensions.tokenizer"
 ]
 
 [phases.install]
